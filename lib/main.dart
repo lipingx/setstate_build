@@ -67,41 +67,47 @@ class _MyHomePageState extends State<MyHomePage> {
     // TODO: implement build
     return new Scaffold(
         appBar: new AppBar(title: new Text('User')),
-        body: Column(children: <Widget>[
-          Text(_loadingState),
-          Expanded(child:_getListViewWidget()),
-        ],)
-    );
+        body: Column(
+          children: <Widget>[
+            Text(_loadingState),
+            Expanded(child: _getListViewWidget()),
+          ],
+        ));
   }
 
-  Widget _getListViewWidget(){
-    ListView lv =  new ListView.builder(
+  Widget _getListViewWidget() {
+    ListView lv = new ListView.builder(
         itemCount: _shownNames.length,
-        itemBuilder: (context, index){
-          if(index >= _shownNames.length - 5 && !loading){
+        itemBuilder: (context, index) {
+          if (index >= _shownNames.length - 5 && !loading) {
             _loadNames(); // Getting error when this is called
           }
-          return  ListTile(
+          return ListTile(
             title: Text(_shownNames[index]),
           );
         });
 
     RefreshIndicator refreshIndicator = new RefreshIndicator(
         //key: _refreshIndicatorKey,
-        onRefresh: (){
-          _loadNames();
+        onRefresh: () {
+          //_loadNames();
+          setState(() => _loadNames());
           return null;
         },
-        child: lv
-    );
+        child: lv);
     return refreshIndicator;
   }
 
-  _loadNames(){
+  _loadNames() {
     loading = true;
-    setState(() {
-      _loadingState = 'loading...';
-    });
+    new Future.delayed(
+        Duration.zero,
+        () => setState(() {
+              _loadingState = 'loading...';
+            }));
+//    setState(() {
+//      _loadingState = 'loading...';
+//    });
 
     new Timer(const Duration(seconds: 5), () {
       setState(() {
